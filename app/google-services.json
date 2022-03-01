@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "688854275681",
+    "firebase_url": "https://mychat-a1076-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "mychat-a1076",
+    "storage_bucket": "mychat-a1076.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688854275681:android:625d808466ee9d7848fc20",
+        "android_client_info": {
+          "package_name": "szathmary.peter.mychat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "688854275681-16lm1ujsvpos42nu2tb02bvtkc3hcjuq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBk1oiHkpS-lvlZlLOTwcgWac8F9pCXwD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "688854275681-16lm1ujsvpos42nu2tb02bvtkc3hcjuq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
