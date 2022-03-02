@@ -11,12 +11,19 @@ import szathmary.peter.mychat.R
 import szathmary.peter.mychat.databinding.ActivityLoginBinding
 import szathmary.peter.mychat.logic.login.EmailChecker
 
+/**
+ * Activity that is first shown at start of application
+ * Activity for user login
+ */
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+
+    //indicating if password is in good format
     private var passwordReady = false
+    //indicating if username(email) is in right email format
     private var usernameReady = false
-    private var errorMassegePassword: TextView? = null
+    private var errorMessagePassword: TextView? = null
     private var crossPassword: ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,11 +31,14 @@ class LoginActivity : AppCompatActivity() {
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+    
+        //textEdit of username(email)
         val username = binding.username
+        //textEdit of password
         val password = binding.password
+        //button for login (is disabled)
         val login = binding.login
-        errorMassegePassword = binding.errorMessagePassword
+        errorMessagePassword = binding.errorMessagePassword
         crossPassword = binding.crossPassword
         crossPassword?.isVisible = false
 
@@ -37,9 +47,13 @@ class LoginActivity : AppCompatActivity() {
                 return
             }
 
+            /**
+             * Checks if password is in right format, than checks if password and username are both in right state,
+             * if yes, login button is enabled
+             */
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                passwordReady = !isPasswordInefficient(password.text.length < 6 && password.text.isNotEmpty())
-                login.isEnabled = checkForLoginAvilability()
+                login.isEnabled = checkForLoginAvailability()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -52,9 +66,13 @@ class LoginActivity : AppCompatActivity() {
                 return
             }
 
+            /**
+             * Checks if username(email) is in right format, than checks if password and username are both in right state,
+             * if yes, login button is enabled
+             */
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 usernameReady = EmailChecker().isValidEmail(username.text)
-                login.isEnabled = checkForLoginAvilability()
+                login.isEnabled = checkForLoginAvailability()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -64,22 +82,34 @@ class LoginActivity : AppCompatActivity() {
         })
 
         login.setOnClickListener{
-            //LOGIN METODA
+            //LOGIN METHOD
         }
     }
 
-    private fun isPasswordInefficient(state: Boolean): Boolean {
-        if (!state) {
+    /**
+     * If password is inefficient, set crossPassword to visible and displays informative text
+     *
+     * @param conditionOfPassword condition of password based on which are help signs displayed
+     * @return condition of password
+     */
+    private fun isPasswordInefficient(conditionOfPassword: Boolean): Boolean {
+        if (!conditionOfPassword) {
             crossPassword?.isVisible = false
-            errorMassegePassword?.isVisible = false
+            errorMessagePassword?.text = getString(R.string.empty_string)
         } else {
             crossPassword?.isVisible = true
-            errorMassegePassword?.text = getString(R.string.password_error_message)
+            errorMessagePassword?.text = getString(R.string.password_error_message)
         }
-        return state
+        return conditionOfPassword
     }
 
-    fun checkForLoginAvilability(): Boolean {
+
+    /**
+     * Checks if both username(email) and password are in right formats
+     * 
+     * @return true if both username and password are in right formats, else false
+     */
+    fun checkForLoginAvailability(): Boolean {
         return usernameReady && passwordReady
     }
 }
