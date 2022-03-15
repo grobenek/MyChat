@@ -11,4 +11,6 @@
     <string name="login_failed">"Login failed"</string>
     <string name="password_error_message">Password must be at least 6 characters long!</string>
     <string name="empty_string" />
+    <string name="hint_usernames">Username</string>
+    <string name="username_error_message">Username must have at least 3 characters!</string>
 </resources>
