@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="szathmary.peter.mychat">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,14 +12,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyChat">
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.login.RegisterOrLoginActivity"
             android:exported="true"
-            android:label="@string/app_name">
+            android:label="@string/title_activity_register_or_login"
+            android:theme="@style/Theme.MyChat.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".main.activity.MainScreenActivityRegular"
+            android:exported="false"
+            android:label="@string/title_activity_main_screen"
+            android:theme="@style/Theme.MyChat.NoActionBar" />
+        <activity
+            android:name=".ui.login.RegisterActivity"
+            android:exported="false"
+            android:label="@string/app_name">
         </activity>
     </application>
 
