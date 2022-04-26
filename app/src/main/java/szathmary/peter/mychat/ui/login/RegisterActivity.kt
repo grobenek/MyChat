@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,7 +17,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import szathmary.peter.mychat.R
-import szathmary.peter.mychat.databinding.ActivityLoginBinding
+import szathmary.peter.mychat.databinding.ActivityRegisterBinding
 import szathmary.peter.mychat.logic.login.EmailChecker
 import szathmary.peter.mychat.logic.login.LoginInformation
 import szathmary.peter.mychat.logic.login.Password
@@ -30,7 +31,7 @@ import szathmary.peter.mychat.user.UserRole
  */
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: ActivityRegisterBinding
 
     //indicating if password is in good format
     private var passwordReady = false
@@ -50,7 +51,7 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //textEdit of username(email)
@@ -60,7 +61,7 @@ class RegisterActivity : AppCompatActivity() {
         //textEdit for username
         username = binding.username!!
         //button for login (is disabled)
-        val login = binding.login
+        val register = binding.register
         warningMessage = binding.errorWarningMessage
         crossPassword = binding.crossPassword
         crossPassword?.isVisible = false
@@ -102,7 +103,7 @@ class RegisterActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 passwordReady =
                     !isPasswordInefficient(password.text.length < 6 && password.text.isNotEmpty())
-                login.isEnabled = checkForLoginAvailability()
+                register.isEnabled = checkForLoginAvailability()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -121,7 +122,7 @@ class RegisterActivity : AppCompatActivity() {
              */
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 emailReady = EmailChecker().isValidEmail(email.text)
-                login.isEnabled = checkForLoginAvailability()
+                register.isEnabled = checkForLoginAvailability()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -130,31 +131,35 @@ class RegisterActivity : AppCompatActivity() {
 
         })
 
-        login.setOnClickListener {
-            val loginInformation = LoginInformation(email.text.toString(), Password(password.text.toString()).getSecuredPassword(), username.text.toString(), UserRole.REGULAR)//TODO sprav kontrolu role
-            val dbreference = Firebase.database.getReference("User").child(loginInformation.username)
+        register.setOnClickListener {
+            val loginInformationFromUser = LoginInformation(
+                email.text.toString(),
+                Password(password.text.toString()).getSecuredPassword(),
+                username.text.toString(),
+                UserRole.REGULAR
+            )//TODO sprav kontrolu role
+            val dbreference =
+                Firebase.database.getReference("User").child(loginInformationFromUser.username)
 
             dbreference.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val user = snapshot.getValue(User::class.java)
                     if (user != null) {
-                        if (user == User(loginInformation)) {
-                            warningMessage?.text = getString(R.string.welcome_message, username.text.toString())
-                            GlobalScope.launch { // launch new coroutine in background and continue
-                                delay(1000) // non-blocking delay for 1 second (default time unit is ms)
-                                val switchActivityIntent =
-                                    Intent(this@RegisterActivity, MainScreenActivityRegular::class.java) //TODO toto nejde
-                                switchActivityIntent.putExtra("username", loginInformation.username)
-                                switchActivityIntent.putExtra("role", loginInformation.role.toString())
-                                switchActivityIntent.putExtra("email", loginInformation.email)
-
-                                startActivity(switchActivityIntent)
-                            }
-                        } else {
-                            warningMessage?.text = getString(R.string.invalid_login)
+                        Log.v("USER JE  NULL", "USER JE NULL")
+                        if (user.username == loginInformationFromUser.username) {
+                            warningMessage?.text = getString(R.string.error_username_exists)
+                            return
                         }
-                    } else {
-                        warningMessage?.text = getString(R.string.invalid_login)
+                    }
+                    Firebase.database.getReference("User")
+                        .child(loginInformationFromUser.username)
+                        .setValue(User(loginInformationFromUser))
+                    warningMessage?.text = getString(R.string.registration_succesfull)
+                    GlobalScope.launch { // launch new coroutine in background and continue
+                        delay(1500) // non-blocking delay for 1 second (default time unit is ms)
+                        val switchActivityIntent =
+                            Intent(this@RegisterActivity, LoginActivity::class.java)
+                        startActivity(switchActivityIntent)
                     }
                 }
 
@@ -171,8 +176,8 @@ class RegisterActivity : AppCompatActivity() {
             delay(1500) // non-blocking delay for 1 second (default time unit is ms)
             val switchActivityIntent =
                 Intent(registerActivity, MainScreenActivityRegular::class.java)
-            switchActivityIntent.putExtra("username" , loginInformation.username)
-            switchActivityIntent.putExtra("password" ,loginInformation.password)
+            switchActivityIntent.putExtra("username", loginInformation.username)
+            switchActivityIntent.putExtra("password", loginInformation.password)
             switchActivityIntent.putExtra("email", loginInformation.email)
             startActivity(switchActivityIntent)
         }

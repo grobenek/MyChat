@@ -16,13 +16,14 @@ class RegisterOrLoginActivity : AppCompatActivity() {
         binding = ActivityRegisterOrLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.registerButton.setOnClickListener{
+        binding.registerButton.setOnClickListener {
             val switchActivityIntent = Intent(this, RegisterActivity::class.java)
             startActivity(switchActivityIntent)
         }
 
-        binding.loginButton.setOnClickListener{
-
+        binding.loginButton.setOnClickListener {
+            val switchActivityIntent = Intent(this, LoginActivity::class.java)
+            startActivity(switchActivityIntent)
         }
     }
 }
