@@ -131,6 +131,9 @@ class RegisterActivity : AppCompatActivity() {
 
         })
 
+        /**
+         * Register user and switch to LoginActivity
+         */
         register.setOnClickListener {
             val loginInformationFromUser = LoginInformation(
                 email.text.toString(),
@@ -146,11 +149,13 @@ class RegisterActivity : AppCompatActivity() {
                     val user = snapshot.getValue(User::class.java)
                     if (user != null) {
                         Log.v("USER JE  NULL", "USER JE NULL")
+                        // checks if user with this name already exist
                         if (user.username == loginInformationFromUser.username) {
                             warningMessage?.text = getString(R.string.error_username_exists)
                             return
                         }
                     }
+                    // create user in database and switch activity to LoginActivity
                     Firebase.database.getReference("User")
                         .child(loginInformationFromUser.username)
                         .setValue(User(loginInformationFromUser))
@@ -170,6 +175,13 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Waits 1500ms and change activity to MainScreenActivityRegular
+     *
+     * @param loginInformation login information of usert
+     */
+
+    @OptIn(DelicateCoroutinesApi::class)
     fun changeToMainScreenActivity(loginInformation: LoginInformation) {
         val registerActivity: RegisterActivity = this
         GlobalScope.launch { // launch new coroutine in background and continue

@@ -38,6 +38,9 @@ class LoginActivity : AppCompatActivity() {
         binding.crossUsernameLogin.isVisible = false
         binding.crossPasswordLogin.isVisible = false
 
+        /**
+         * Checks if user with set loginInformation exists and switch to MainScreenActivityRegular
+         */
         binding.loginButton.setOnClickListener {
             val loginInformationFromUser = LoginInformation("", Password(binding.passwordTextEditLogin.text.toString()).getSecuredPassword(), binding.usernameTextEditLogin.text.toString(), null)//TODO sprav kontrolu role
             val dbreference = Firebase.database.getReference("User").child(binding.usernameTextEditLogin.text.toString())

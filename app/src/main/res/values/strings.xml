@@ -126,4 +126,8 @@
     <string name="error_username_exists">Username already exists!</string>
     <string name="registration_succesfull">Registration was succesfull!</string>
     <string name="please_register">Please, register!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="messages">Messages</string>
+    <string name="user">User</string>
 </resources>
