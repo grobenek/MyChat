@@ -1,6 +1,7 @@
 package szathmary.peter.mychat.main.activity
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -33,8 +34,11 @@ class MainScreenActivityRegular : AppCompatActivity() {
         val navController = navHostFragment.navController
         val bottomNavigationView = binding.bottomNavigationView
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
+    }
 
-
-
+    //disabled bavk button
+    override fun onBackPressed() {
+        Toast.makeText(applicationContext,"You must logout in User page!", Toast.LENGTH_SHORT).show()
+        return
     }
 }

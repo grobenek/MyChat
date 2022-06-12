@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.firebase.database.DataSnapshot
@@ -58,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
                                     Intent(this@LoginActivity, MainScreenActivityRegular::class.java)
                                 switchActivityIntent.putExtra("username", loginInformationFromUser.username)
                                 switchActivityIntent.putExtra("role", loginInformationFromUser.role.toString())
-                                switchActivityIntent.putExtra("email", loginInformationFromUser.email)
+                                switchActivityIntent.putExtra("email", loginInformationFromDatabase.email)
 
                                 startActivity(switchActivityIntent)
                             }
