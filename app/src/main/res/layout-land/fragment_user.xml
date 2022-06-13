@@ -10,30 +10,27 @@
         android:id="@+id/username_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
         android:text="@string/hint_usernames"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintEnd_toStartOf="@+id/avatar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/avatar"
-        app:layout_constraintVertical_bias="0.038" />
+        app:layout_constraintTop_toBottomOf="@+id/avatar" />
 
     <TextView
         android:id="@+id/email_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
         android:text="@string/prompt_email"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/username_info"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="@+id/username_info"
-        app:layout_constraintTop_toBottomOf="@+id/username_info"
-        app:layout_constraintVertical_bias="0.068" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.528"
+        app:layout_constraintStart_toEndOf="@+id/avatar"
+        app:layout_constraintTop_toBottomOf="@+id/avatar" />
 
     <ImageView
         android:id="@+id/avatar"
-        android:layout_width="181dp"
-        android:layout_height="169dp"
+        android:layout_width="130dp"
+        android:layout_height="105dp"
         android:layout_marginTop="4dp"
         android:src="@drawable/avatardefault_92824"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,10 +41,9 @@
         android:id="@+id/envelope"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:src="@android:drawable/sym_action_email"
         app:layout_constraintBottom_toBottomOf="@+id/email_info"
-        app:layout_constraintEnd_toStartOf="@+id/email_info"
+        app:layout_constraintStart_toEndOf="@+id/email_info"
         app:layout_constraintTop_toTopOf="@+id/email_info" />
 
     <Button
@@ -58,15 +54,15 @@
         android:text="@string/logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_info"
-        app:layout_constraintVertical_bias="0.748" />
+        app:layout_constraintVertical_bias="0.814" />
 
     <TextView
         android:id="@+id/forgot_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"
         android:minHeight="48dp"
@@ -75,7 +71,6 @@
         android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/logout_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

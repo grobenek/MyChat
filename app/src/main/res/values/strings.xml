@@ -131,4 +131,5 @@
     <string name="messages">Messages</string>
     <string name="user">User</string>
     <string name="logout">logout</string>
+    <string name="forgot_password">forgot password</string>
 </resources>

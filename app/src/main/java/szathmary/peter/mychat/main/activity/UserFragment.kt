@@ -53,6 +53,8 @@ class UserFragment : Fragment() {
                 startActivity(switchActivityIntent)
             }
         }
+
+        //TODO dorobit zmenu hesla
     }
 
     private fun retrieveUserInformation() {

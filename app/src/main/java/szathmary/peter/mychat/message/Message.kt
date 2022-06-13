@@ -9,7 +9,7 @@ import java.util.*
  * @property text text of message
  * @property timeAndDate date and time of creation of message
  */
-data class Message(val sender: User, val text: String) {
+data class Message(var sender: String? = null, var text: String? = null) {
     //time and date (hopefully) of message
     private val timeAndDate = Calendar.getInstance()
 }
