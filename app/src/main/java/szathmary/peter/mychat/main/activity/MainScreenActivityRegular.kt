@@ -17,8 +17,11 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import szathmary.peter.mychat.R
 import szathmary.peter.mychat.databinding.ActivityMainScreenBinding
+import szathmary.peter.mychat.message.Message
 
 
 class MainScreenActivityRegular : AppCompatActivity() {
@@ -31,9 +34,6 @@ class MainScreenActivityRegular : AppCompatActivity() {
         binding = ActivityMainScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val messagesFragment = MessagesFragment()
-        val userFragment = UserFragment()
-
         //zo stranky
         val navHostFragment = supportFragmentManager.findFragmentById(
             R.id.nav_host_main
@@ -41,6 +41,22 @@ class MainScreenActivityRegular : AppCompatActivity() {
         val navController = navHostFragment.navController
         val bottomNavigationView = binding.bottomNavigationView
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
+
+
+        // system notification that user is online - najdi sposob aby to userovi neukazalochat
+        val dbReferrence = Firebase.database.getReference("Messages")
+        val newChild = dbReferrence.push()
+
+        val key = newChild.key
+        if (key != null) {
+            dbReferrence.child(key).setValue(
+                Message(
+                    "System",
+                    intent?.getStringExtra("username").toString() + " is online!"
+                )
+            )
+        }
+
     }
 
     //disabled bavk button

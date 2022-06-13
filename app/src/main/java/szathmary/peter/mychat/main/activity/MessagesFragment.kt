@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,36 +21,24 @@ import szathmary.peter.mychat.message.Message
 
 class MessagesFragment : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_messages, container, false)
-    }
+    val adapter = MessagesAdapter()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        val rvMessages: RecyclerView = view.findViewById(R.id.messages_recycle) as RecyclerView
-
-        val adapter = MessagesAdapter()
-
-        rvMessages.adapter = adapter
-        rvMessages.layoutManager = LinearLayoutManager(this.context)
-
-
-        val dbreference = Firebase.database.getReference("Messages") // prve naplnenie arrayu sprav
+        val dbreference = Firebase.database.getReference("Messages")
 
         dbreference.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    val messageToAdd = Message(
-                        snapshot.child("sender").value as String?,
-                        snapshot.child("text").value as String?
-                    )
-                    Log.v("NEW CHILD ADDED", messageToAdd.sender!!)
-                    MessageList.addMessage(messageToAdd)
-                    adapter.notifyItemRangeRemoved(MessageList.size(), 1)
+                val messageToAdd = Message(
+                    snapshot.child("sender").value as String?,
+                    snapshot.child("text").value as String?
+                )
+                Log.v("NEW CHILD ADDED", messageToAdd.sender!!)
+                MessageList.addMessage(messageToAdd)
+                adapter.notifyItemRangeRemoved(MessageList.size(), 1)
+                val rvMessages: RecyclerView = view?.findViewById(R.id.messages_recycle) as RecyclerView
+                rvMessages.scrollToPosition(MessageList.size()-1)
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -68,14 +58,43 @@ class MessagesFragment : Fragment() {
             }
 
         })
+    }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_messages, container, false)
+    }
 
-        //TODO spravit odosielanie sprav cez textEdit
+    // spusti sa len raz pri prvom vytvoreni fragmentu
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val rvMessages: RecyclerView = view.findViewById(R.id.messages_recycle) as RecyclerView
+
+        rvMessages.adapter = adapter
+        rvMessages.layoutManager = LinearLayoutManager(this.context)
+        // sending messages
+        val sendButton : ImageButton = view.findViewById(R.id.send_button)
         val messageInput : EditText = view.findViewById(R.id.message_input)
 
+        sendButton.setOnClickListener{
+            if (messageInput.text.isNotEmpty()) {
+                val dbReferrence = Firebase.database.getReference("Messages")
+                val newChild = dbReferrence.push()
 
-
-
+                val key = newChild.key
+                if (key != null) {
+                    dbReferrence.child(key).setValue(Message(activity?.intent?.getStringExtra("username").toString(),
+                        messageInput.text.toString()
+                    //TODO niekedy sa sprava odosielatelovi ukaze 2x
+                    ))
+                    messageInput.setText("")
+                }
+            }
+        }
     }
 
     inner class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.ViewHolder>()
