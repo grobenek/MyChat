@@ -57,6 +57,7 @@ class UserFragment : Fragment() {
         //TODO dorobit zmenu hesla
     }
 
+    // ziskam udaje o aktualnom uzivatelovi z putExtra
     private fun retrieveUserInformation() {
         username = activity?.intent?.getStringExtra("username").toString()
         email = activity?.intent?.getStringExtra("email").toString()

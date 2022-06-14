@@ -56,10 +56,9 @@ class MainScreenActivityRegular : AppCompatActivity() {
                 )
             )
         }
-
     }
 
-    //disabled bavk button
+    //disabled back button
     override fun onBackPressed() {
         Toast.makeText(applicationContext,"You must logout in User page!", Toast.LENGTH_SHORT).show()
         return

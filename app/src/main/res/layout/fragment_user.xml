@@ -38,7 +38,8 @@
         android:src="@drawable/avatardefault_92824"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/avatar_image" />
 
     <ImageView
         android:id="@+id/envelope"
@@ -48,7 +49,9 @@
         android:src="@android:drawable/sym_action_email"
         app:layout_constraintBottom_toBottomOf="@+id/email_info"
         app:layout_constraintEnd_toStartOf="@+id/email_info"
-        app:layout_constraintTop_toTopOf="@+id/email_info" />
+        app:layout_constraintTop_toTopOf="@+id/email_info"
+        tools:ignore="ImageContrastCheck"
+        android:contentDescription="@string/envelope" />
 
     <Button
         android:id="@+id/logout_button"

@@ -19,11 +19,11 @@ import kotlinx.coroutines.*
 import szathmary.peter.mychat.R
 import szathmary.peter.mychat.databinding.ActivityRegisterBinding
 import szathmary.peter.mychat.logic.login.EmailChecker
+import szathmary.peter.mychat.logic.login.InternetConnectionChecker
 import szathmary.peter.mychat.logic.login.LoginInformation
 import szathmary.peter.mychat.logic.login.Password
 import szathmary.peter.mychat.main.activity.MainScreenActivityRegular
 import szathmary.peter.mychat.user.User
-import szathmary.peter.mychat.user.UserRole
 
 /**
  * Activity that is first shown at start of application
@@ -135,11 +135,15 @@ class RegisterActivity : AppCompatActivity() {
          * Register user and switch to LoginActivity
          */
         register.setOnClickListener {
+            binding.errorWarningMessage?.text = getString(R.string.empty_string)
+            if (!InternetConnectionChecker().hasInternetConnection(this)) {
+                binding.errorWarningMessage?.text = "You are not connected to the internet!" // dat ako text
+                return@setOnClickListener
+            }
             val loginInformationFromUser = LoginInformation(
                 email.text.toString(),
                 Password(password.text.toString()).getSecuredPassword(),
-                username.text.toString(),
-                UserRole.REGULAR
+                username.text.toString()
             )//TODO sprav kontrolu role
             val dbreference =
                 Firebase.database.getReference("User").child(loginInformationFromUser.username)

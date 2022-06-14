@@ -73,7 +73,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/password"
         app:layout_constraintEnd_toEndOf="@+id/password"
         app:layout_constraintTop_toTopOf="@+id/password"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:srcCompat="@android:drawable/ic_delete"
+        android:contentDescription="@string/cross" />
 
     <TextView
         android:id="@+id/error_warning_message"
@@ -86,6 +87,7 @@
         android:id="@+id/cross_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/cross"
         app:layout_constraintBottom_toBottomOf="@+id/username"
         app:layout_constraintEnd_toEndOf="@+id/username"
         app:layout_constraintTop_toTopOf="@+id/username"

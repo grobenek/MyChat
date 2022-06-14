@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="szathmary.peter.mychat">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -28,6 +29,7 @@
         </activity>
         <activity
             android:name=".main.activity.MainScreenActivityRegular"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
             android:noHistory="true"
             android:theme="@style/Theme.MyChat.NoActionBar" />

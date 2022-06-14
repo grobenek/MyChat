@@ -5,10 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +16,7 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import szathmary.peter.mychat.R
+import szathmary.peter.mychat.logic.login.InternetConnectionChecker
 import szathmary.peter.mychat.message.Message
 
 
@@ -26,19 +27,24 @@ class MessagesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //referencia na cast databazy so spravami
         val dbreference = Firebase.database.getReference("Messages")
-
         dbreference.addChildEventListener(object : ChildEventListener {
+            // ak sa prida sprava, zobrazi sa v recycleView
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val messageToAdd = Message(
                     snapshot.child("sender").value as String?,
-                    snapshot.child("text").value as String?
+                    snapshot.child("text").value as String?,
+                    //TODO pridat aj cas
                 )
                 Log.v("NEW CHILD ADDED", messageToAdd.sender!!)
                 MessageList.addMessage(messageToAdd)
                 adapter.notifyItemRangeRemoved(MessageList.size(), 1)
-                val rvMessages: RecyclerView = view?.findViewById(R.id.messages_recycle) as RecyclerView
-                rvMessages.scrollToPosition(MessageList.size()-1)
+                //aby sa scrollovalo automaticky na spodok ak je view vytvoreny (nefunguje pri otoceni obrazovky)
+                if (view != null) {
+                    val rvMessages: RecyclerView = view!!.findViewById(R.id.messages_recycle) as RecyclerView
+                    rvMessages.scrollToPosition(MessageList.size()-1)
+                }
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -56,8 +62,14 @@ class MessagesFragment : Fragment() {
             override fun onCancelled(error: DatabaseError) {
                 Log.e("Error in reading new messages from database", error.message)
             }
-
         })
+    }
+
+    //skusam
+    override fun onStart() {
+        super.onStart()
+        val rvMessages: RecyclerView = view!!.findViewById(R.id.messages_recycle) as RecyclerView
+        rvMessages.scrollToPosition(MessageList.size()-1)
     }
 
     override fun onCreateView(
@@ -72,15 +84,22 @@ class MessagesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //vytvori sa recycleView, pripoji sa adapter
         val rvMessages: RecyclerView = view.findViewById(R.id.messages_recycle) as RecyclerView
-
         rvMessages.adapter = adapter
         rvMessages.layoutManager = LinearLayoutManager(this.context)
         // sending messages
         val sendButton : ImageButton = view.findViewById(R.id.send_button)
         val messageInput : EditText = view.findViewById(R.id.message_input)
 
+        //ak stlacim tlacidlo a nemam prazdny text, text sa odosle ako sprava do databazy
         sendButton.setOnClickListener{
+            if (activity != null) {
+                if (!InternetConnectionChecker().hasInternetConnection(activity?.applicationContext!!)) {
+                    Toast.makeText(activity?.applicationContext,"You are not connected to the internet!", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+            }
             if (messageInput.text.isNotEmpty()) {
                 val dbReferrence = Firebase.database.getReference("Messages")
                 val newChild = dbReferrence.push()

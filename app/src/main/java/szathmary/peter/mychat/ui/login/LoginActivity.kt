@@ -18,6 +18,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import szathmary.peter.mychat.R
 import szathmary.peter.mychat.databinding.ActivityLoginBinding
+import szathmary.peter.mychat.logic.login.InternetConnectionChecker
 import szathmary.peter.mychat.logic.login.LoginInformation
 import szathmary.peter.mychat.logic.login.Password
 import szathmary.peter.mychat.main.activity.MainScreenActivityRegular
@@ -43,7 +44,12 @@ class LoginActivity : AppCompatActivity() {
          * Checks if user with set loginInformation exists and switch to MainScreenActivityRegular
          */
         binding.loginButton.setOnClickListener {
-            val loginInformationFromUser = LoginInformation("", Password(binding.passwordTextEditLogin.text.toString()).getSecuredPassword(), binding.usernameTextEditLogin.text.toString(), null)//TODO sprav kontrolu role
+            binding.errorWarningMessageLogin.text = getString(R.string.empty_string)
+            if (!InternetConnectionChecker().hasInternetConnection(this)) {
+                binding.errorWarningMessageLogin.text = "You are not connected to the internet!" // dat ako text
+                return@setOnClickListener
+            }
+            val loginInformationFromUser = LoginInformation("", Password(binding.passwordTextEditLogin.text.toString()).getSecuredPassword(), binding.usernameTextEditLogin.text.toString())
             val dbreference = Firebase.database.getReference("User").child(binding.usernameTextEditLogin.text.toString())
             lateinit var loginInformationFromDatabase: LoginInformation
             dbreference.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -58,7 +64,6 @@ class LoginActivity : AppCompatActivity() {
                                 val switchActivityIntent =
                                     Intent(this@LoginActivity, MainScreenActivityRegular::class.java)
                                 switchActivityIntent.putExtra("username", loginInformationFromUser.username)
-                                switchActivityIntent.putExtra("role", loginInformationFromUser.role.toString())
                                 switchActivityIntent.putExtra("email", loginInformationFromDatabase.email)
 
                                 startActivity(switchActivityIntent)

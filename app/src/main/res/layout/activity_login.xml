@@ -8,6 +8,7 @@
 
     <TextView
         android:id="@+id/error_warning_message_login"
+        android:paddingEnd="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@+id/passwordTextEditLogin"
@@ -20,7 +21,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/passwordTextEditLogin"
         app:layout_constraintEnd_toEndOf="@+id/passwordTextEditLogin"
         app:layout_constraintTop_toTopOf="@+id/passwordTextEditLogin"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:srcCompat="@android:drawable/ic_delete"
+        android:contentDescription="@string/cross" />
 
     <ImageView
         android:id="@+id/cross_username_login"
@@ -29,7 +31,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/usernameTextEditLogin"
         app:layout_constraintEnd_toEndOf="@+id/usernameTextEditLogin"
         app:layout_constraintTop_toTopOf="@+id/usernameTextEditLogin"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:srcCompat="@android:drawable/ic_delete"
+        android:contentDescription="@string/cross" />
 
     <EditText
         android:id="@+id/usernameTextEditLogin"
@@ -39,14 +42,16 @@
         android:ems="10"
         android:hint="@string/hint_usernames"
         android:inputType="textPersonName"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeMessageLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/welcomeMessageLogin"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/welcomeMessageLogin"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="19dp"
         android:layout_marginTop="100dp"
         android:text="@string/login_welcome"
         android:textAlignment="center"
@@ -63,9 +68,11 @@
         android:ems="10"
         android:hint="@string/prompt_password"
         android:inputType="textPassword"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameTextEditLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/usernameTextEditLogin"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/loginButton"

@@ -132,4 +132,9 @@
     <string name="user">User</string>
     <string name="logout">logout</string>
     <string name="forgot_password">forgot password</string>
+    <string name="cross">Cross</string>
+    <string name="message_input">message input</string>
+    <string name="send_message_button">send message button</string>
+    <string name="avatar_image">avatar image</string>
+    <string name="envelope">envelope</string>
 </resources>
