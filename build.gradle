@@ -2,10 +2,12 @@ buildscript {
     repositories {
         // Check that you have the following line (if not, add it):
         google()  // Google's Maven repository
+        mavenCentral()
     }
     dependencies {
         // Add this line
         classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.6.21'
     }
 }
 
