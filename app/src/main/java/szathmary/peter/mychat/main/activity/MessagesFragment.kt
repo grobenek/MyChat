@@ -108,7 +108,6 @@ class MessagesFragment : Fragment() {
                 if (key != null) {
                     dbReferrence.child(key).setValue(Message(activity?.intent?.getStringExtra("username").toString(),
                         messageInput.text.toString()
-                    //TODO niekedy sa sprava odosielatelovi ukaze 2x
                     ))
                     messageInput.setText("")
                 }

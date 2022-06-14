@@ -40,6 +40,8 @@ class LoginActivity : AppCompatActivity() {
         binding.crossUsernameLogin.isVisible = false
         binding.crossPasswordLogin.isVisible = false
 
+        binding.loginButton.isEnabled = true
+
         /**
          * Checks if user with set loginInformation exists and switch to MainScreenActivityRegular
          */
@@ -49,6 +51,12 @@ class LoginActivity : AppCompatActivity() {
                 binding.errorWarningMessageLogin.text = "You are not connected to the internet!" // dat ako text
                 return@setOnClickListener
             }
+            if (binding.usernameTextEditLogin.text.isEmpty() || binding.passwordTextEditLogin.text.isEmpty()) {
+                binding.errorWarningMessageLogin.text = "You must fill out all forms!"
+                return@setOnClickListener
+            }
+
+            binding.loginButton.isEnabled = false
             val loginInformationFromUser = LoginInformation("", Password(binding.passwordTextEditLogin.text.toString()).getSecuredPassword(), binding.usernameTextEditLogin.text.toString())
             val dbreference = Firebase.database.getReference("User").child(binding.usernameTextEditLogin.text.toString())
             lateinit var loginInformationFromDatabase: LoginInformation
@@ -78,6 +86,7 @@ class LoginActivity : AppCompatActivity() {
 
                 override fun onCancelled(error: DatabaseError) {
                     binding.errorWarningMessageLogin.text = error.toString()
+                    binding.loginButton.isEnabled = true
                 }
             })
         }

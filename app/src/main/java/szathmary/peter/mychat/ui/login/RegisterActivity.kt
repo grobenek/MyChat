@@ -140,6 +140,12 @@ class RegisterActivity : AppCompatActivity() {
                 binding.errorWarningMessage?.text = "You are not connected to the internet!" // dat ako text
                 return@setOnClickListener
             }
+            if (username.text.isEmpty() || email.text.isEmpty() || password.text.isEmpty()) {
+                warningMessage?.text = "You must fill out all forms!"
+                return@setOnClickListener
+            }
+
+
             val loginInformationFromUser = LoginInformation(
                 email.text.toString(),
                 Password(password.text.toString()).getSecuredPassword(),
