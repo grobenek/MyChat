@@ -137,4 +137,9 @@
     <string name="send_message_button">send message button</string>
     <string name="avatar_image">avatar image</string>
     <string name="envelope">envelope</string>
+    <string name="title_activity_reset_password">ResetPasswordActivity</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="reset_password">reset password</string>
+    <string name="new_password">New password</string>
 </resources>

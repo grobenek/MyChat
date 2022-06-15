@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,19 +16,20 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.*
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import szathmary.peter.mychat.R
 import szathmary.peter.mychat.databinding.ActivityRegisterBinding
 import szathmary.peter.mychat.logic.login.EmailChecker
 import szathmary.peter.mychat.logic.login.InternetConnectionChecker
 import szathmary.peter.mychat.logic.login.LoginInformation
 import szathmary.peter.mychat.logic.login.Password
-import szathmary.peter.mychat.main.activity.MainScreenActivityRegular
 import szathmary.peter.mychat.user.User
 
 /**
- * Activity that is first shown at start of application
- * Activity for user login
+ * Activity for registering user
  */
 class RegisterActivity : AppCompatActivity() {
 
@@ -60,19 +62,22 @@ class RegisterActivity : AppCompatActivity() {
         val password = binding.password
         //textEdit for username
         username = binding.username!!
-        //button for login (is disabled)
         val register = binding.register
         warningMessage = binding.errorWarningMessage
         crossPassword = binding.crossPassword
         crossPassword?.isVisible = false
         crossUsername = binding.crossUsername
         crossUsername?.isVisible = false
+        binding.register.isEnabled = false
 
         binding.username?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 return
             }
 
+            /**
+             * Checks condition of username and set usernameCross, warningMessage and enable/disable register button
+             */
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (username.text?.isEmpty() == true || username.text?.length!! < 3) {
                     crossUsername?.isVisible = true
@@ -91,14 +96,13 @@ class RegisterActivity : AppCompatActivity() {
 
         })
 
-        password.addTextChangedListener(object : TextWatcher {
+        password?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 return
             }
 
             /**
-             * Checks if password is in right format, than checks if password and username are both in right state,
-             * if yes, login button is enabled
+             * Checks condition of password and set passwordCross, warningMessage and enable/disable register button
              */
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 passwordReady =
@@ -117,92 +121,118 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             /**
-             * Checks if email is in right format, than checks if password and username are both in right state,
-             * if yes, login button is enabled
+             * Checks condition of email and set emailCross, warningMessage and enable/disable register button
              */
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 emailReady = EmailChecker().isValidEmail(email.text)
+                if (!emailReady) {
+                    warningMessage?.text = "You must enter a valid email adress!"
+                } else {
+                    warningMessage?.text = ""
+                }
                 register.isEnabled = checkForLoginAvailability()
             }
 
             override fun afterTextChanged(p0: Editable?) {
                 return
             }
-
         })
 
-        /**
-         * Register user and switch to LoginActivity
-         */
+        if (password != null) {
+            attachListenerToRegisterButton(register, email, password)
+        }
+    }
+
+    /**
+     * Attach listener to register button and try to register user
+     *
+     * @param register button for registration
+     * @param email editText with email of user
+     * @param password editText with password of user
+     */
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun attachListenerToRegisterButton(
+        register: Button,
+        email: EditText,
+        password: EditText
+    ) {
         register.setOnClickListener {
             binding.errorWarningMessage?.text = getString(R.string.empty_string)
             if (!InternetConnectionChecker().hasInternetConnection(this)) {
-                binding.errorWarningMessage?.text = "You are not connected to the internet!" // dat ako text
+                binding.errorWarningMessage?.text =
+                    "You are not connected to the internet!" // dat ako text
                 return@setOnClickListener
             }
             if (username.text.isEmpty() || email.text.isEmpty() || password.text.isEmpty()) {
                 warningMessage?.text = "You must fill out all forms!"
                 return@setOnClickListener
             }
-
-
+            binding.register.isEnabled = false
             val loginInformationFromUser = LoginInformation(
                 email.text.toString(),
                 Password(password.text.toString()).getSecuredPassword(),
                 username.text.toString()
-            )//TODO sprav kontrolu role
-            val dbreference =
-                Firebase.database.getReference("User").child(loginInformationFromUser.username)
-
-            dbreference.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val user = snapshot.getValue(User::class.java)
-                    if (user != null) {
-                        Log.v("USER JE  NULL", "USER JE NULL")
-                        // checks if user with this name already exist
-                        if (user.username == loginInformationFromUser.username) {
-                            warningMessage?.text = getString(R.string.error_username_exists)
-                            return
-                        }
-                    }
-                    // create user in database and switch activity to LoginActivity
-                    Firebase.database.getReference("User")
-                        .child(loginInformationFromUser.username)
-                        .setValue(User(loginInformationFromUser))
-                    warningMessage?.text = getString(R.string.registration_succesfull)
-                    GlobalScope.launch { // launch new coroutine in background and continue
-                        delay(1500) // non-blocking delay for 1 second (default time unit is ms)
-                        val switchActivityIntent =
-                            Intent(this@RegisterActivity, LoginActivity::class.java)
-                        startActivity(switchActivityIntent)
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    warningMessage?.text = error.toString()
-                }
-            })
+            )
+            tryToRegisterUser(loginInformationFromUser)
         }
     }
 
     /**
-     * Waits 1500ms and change activity to MainScreenActivityRegular
+     * Check if user is already in database, if not, register him
      *
-     * @param loginInformation login information of usert
+     * @param loginInformationFromUser login information of user that would be registered
      */
-
     @OptIn(DelicateCoroutinesApi::class)
-    fun changeToMainScreenActivity(loginInformation: LoginInformation) {
-        val registerActivity: RegisterActivity = this
-        GlobalScope.launch { // launch new coroutine in background and continue
-            delay(1500) // non-blocking delay for 1 second (default time unit is ms)
-            val switchActivityIntent =
-                Intent(registerActivity, MainScreenActivityRegular::class.java)
-            switchActivityIntent.putExtra("username", loginInformation.username)
-            switchActivityIntent.putExtra("password", loginInformation.password)
-            switchActivityIntent.putExtra("email", loginInformation.email)
-            startActivity(switchActivityIntent)
-        }
+    private fun tryToRegisterUser(loginInformationFromUser: LoginInformation) {
+        val dbreference =
+            Firebase.database.getReference("User").child(loginInformationFromUser.username)
+
+        dbreference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(User::class.java)
+                if (user != null) {
+                    Log.v("User is null", "User is null")
+                    // checks if user with this name already exist
+                    if (user.username == loginInformationFromUser.username) {
+                        warningMessage?.text = getString(R.string.error_username_exists)
+                        binding.register.isEnabled = true
+                        return
+                    }
+                }
+                // create user in database and switch activity to LoginActivity
+                writeUserToDatabase(loginInformationFromUser)
+                warningMessage?.text = getString(R.string.registration_succesfull)
+                GlobalScope.launch { // launch new coroutine in background and continue
+                    delay(1500) // non-blocking delay for 1 second (default time unit is ms)
+                    switchToLoginActivity()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                warningMessage?.text = error.toString()
+                binding.register.isEnabled = true
+            }
+        })
+    }
+
+    /**
+     * Switch to loginActivity
+     */
+    private fun switchToLoginActivity() {
+        val switchActivityIntent =
+            Intent(this@RegisterActivity, LoginActivity::class.java)
+        startActivity(switchActivityIntent)
+    }
+
+    /**
+     * Write user to the database
+     *
+     * @param loginInformationFromUser login information of user that will be registered
+     */
+    private fun writeUserToDatabase(loginInformationFromUser: LoginInformation) {
+        Firebase.database.getReference("User")
+            .child(loginInformationFromUser.username)
+            .setValue(User(loginInformationFromUser))
     }
 
     /**
@@ -228,7 +258,7 @@ class RegisterActivity : AppCompatActivity() {
      *
      * @return true if both username, email and password are in right formats, else false
      */
-    fun checkForLoginAvailability(): Boolean {
+    private fun checkForLoginAvailability(): Boolean {
         return emailReady && passwordReady && usernameReady
     }
 }

@@ -14,8 +14,8 @@
         android:theme="@style/Theme.MyChat">
         <activity
             android:name=".ui.login.LoginActivity"
-            android:noHistory="true"
             android:exported="false"
+            android:noHistory="true"
             android:theme="@style/Theme.MyChat.NoActionBar" />
         <activity
             android:name=".ui.login.RegisterOrLoginActivity"
@@ -29,14 +29,20 @@
         </activity>
         <activity
             android:name=".main.activity.MainScreenActivityRegular"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="false"
             android:noHistory="true"
             android:theme="@style/Theme.MyChat.NoActionBar" />
         <activity
             android:name=".ui.login.RegisterActivity"
-            android:noHistory="true"
-            android:exported="false" />
+            android:theme="@style/Theme.MyChat.NoActionBar"
+            android:exported="false"
+            android:noHistory="true" />
+
+        <activity android:name=".main.activity.ResetPasswordActivity"
+            android:theme="@style/Theme.MyChat.NoActionBar"
+            android:exported="false"
+            android:noHistory="true"/>
     </application>
 
 </manifest>

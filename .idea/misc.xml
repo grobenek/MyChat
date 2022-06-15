@@ -15,7 +15,9 @@
         <entry key="app/src/main/res/layout/activity_main_screen.xml" value="0.21285892062717016" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_register_or_login.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/activity_reset_password.xml" value="0.23333333333333334" />
         <entry key="app/src/main/res/layout/content_login.xml" value="0.23333333333333334" />
+        <entry key="app/src/main/res/layout/content_reset_password.xml" value="0.23333333333333334" />
         <entry key="app/src/main/res/layout/content_scrolling.xml" value="0.2346014492753623" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/fragment_messages.xml" value="0.23333333333333334" />
