@@ -69,7 +69,6 @@ class UserFragment : Fragment() {
             logoutButton.isEnabled = false
             GlobalScope.launch { // launch new coroutine in background and continue
                 delay(1000) // non-blocking delay for 1 second (default time unit is ms)
-
                 switchToRegisterOrLoginActivity()
             }
         }
@@ -80,6 +79,8 @@ class UserFragment : Fragment() {
      */
     private fun switchToRegisterOrLoginActivity() {
         activity?.finishAffinity() // clear activity stack
+        activity?.intent?.removeExtra("username")
+        activity?.intent?.removeExtra("email")
         val switchActivityIntent =
             Intent(activity, RegisterOrLoginActivity::class.java)
         startActivity(switchActivityIntent)
@@ -90,6 +91,8 @@ class UserFragment : Fragment() {
      */
     private fun switchToResetPasswordActivity() {
         activity?.finishAffinity() // clear activity stack
+        activity?.intent?.removeExtra("username")
+        activity?.intent?.removeExtra("email")
         val switchActivityIntent =
             Intent(activity, ResetPasswordActivity::class.java)
         switchActivityIntent.putExtra("username", username)

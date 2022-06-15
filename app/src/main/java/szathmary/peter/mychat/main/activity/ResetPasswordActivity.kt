@@ -109,6 +109,8 @@ class ResetPasswordActivity : AppCompatActivity() {
      */
     private fun switchToLoginActivity() {
         this.finishAffinity() // clear activity stack
+        intent?.removeExtra("username")
+        intent?.removeExtra("email")
         val switchActivityIntent =
             Intent(this, LoginActivity::class.java)
         startActivity(switchActivityIntent)

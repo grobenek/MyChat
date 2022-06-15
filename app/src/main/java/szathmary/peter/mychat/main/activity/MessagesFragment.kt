@@ -1,5 +1,6 @@
 package szathmary.peter.mychat.main.activity
 
+import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -16,11 +17,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.core.Context
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import szathmary.peter.mychat.R
 import szathmary.peter.mychat.logic.login.InternetConnectionChecker
 import szathmary.peter.mychat.message.Message
+
 
 /**
  * Fragment for reading/sending messages
@@ -28,6 +31,7 @@ import szathmary.peter.mychat.message.Message
 class MessagesFragment : Fragment() {
 
     private val adapter = MessagesAdapter()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +47,10 @@ class MessagesFragment : Fragment() {
                     snapshot.child("sender").value as String?,
                     snapshot.child("text").value as String?,
                 )
+
+                if (activity == null && messageToAdd.sender == "System") {
+                    return
+                }
 
                 // System announcement about actual users online status won't be shown
                 if (messageToAdd.sender == "System" && messageToAdd.text.toString()
