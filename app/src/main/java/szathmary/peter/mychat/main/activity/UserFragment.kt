@@ -62,6 +62,4 @@ class UserFragment : Fragment() {
         username = activity?.intent?.getStringExtra("username").toString()
         email = activity?.intent?.getStringExtra("email").toString()
     }
-
-
 }

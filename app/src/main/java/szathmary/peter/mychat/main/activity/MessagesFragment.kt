@@ -1,5 +1,6 @@
 package szathmary.peter.mychat.main.activity
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -100,7 +101,7 @@ class MessagesFragment : Fragment() {
                     return@setOnClickListener
                 }
             }
-            if (messageInput.text.isNotEmpty()) {
+            if (messageInput.text.isNotEmpty() && messageInput.text.toString().filterNot { it.isWhitespace() }.isNotEmpty()) {
                 val dbReferrence = Firebase.database.getReference("Messages")
                 val newChild = dbReferrence.push()
 
@@ -109,9 +110,9 @@ class MessagesFragment : Fragment() {
                     dbReferrence.child(key).setValue(Message(activity?.intent?.getStringExtra("username").toString(),
                         messageInput.text.toString()
                     ))
-                    messageInput.setText("")
                 }
             }
+            messageInput.setText("")
         }
     }
 
@@ -140,6 +141,18 @@ class MessagesFragment : Fragment() {
             val messageText = holder.message
 
             userText.text = message.sender
+
+            // ak to je moja sprava, nastavim farbu na cervenu
+            if (userText.text == activity?.intent?.getStringExtra("username").toString()) {
+                userText.setTextColor(Color.rgb(179, 137, 237))
+            }
+
+            if (userText.text == "System") {
+                userText.setTextColor(Color.CYAN)
+            } else {
+                userText.setTextColor(Color.rgb(255, 195, 0))
+            }
+
             messageText.text = message.text
         }
 
