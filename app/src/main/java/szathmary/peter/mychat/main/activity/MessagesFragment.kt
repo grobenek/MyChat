@@ -36,8 +36,10 @@ class MessagesFragment : Fragment() {
                 val messageToAdd = Message(
                     snapshot.child("sender").value as String?,
                     snapshot.child("text").value as String?,
-                    //TODO pridat aj cas
                 )
+                if (messageToAdd.sender == "System" && messageToAdd.text.toString().contains(activity?.intent?.getStringExtra("username").toString())) {
+                    return
+                }
                 Log.v("NEW CHILD ADDED", messageToAdd.sender!!)
                 MessageList.addMessage(messageToAdd)
                 adapter.notifyItemRangeRemoved(MessageList.size(), 1)
