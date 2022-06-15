@@ -141,13 +141,13 @@ class MessagesFragment : Fragment() {
             val messageText = holder.message
 
             userText.text = message.sender
+            //TODO vypisat spravu na kontrolu mailu
+            //TODO disable button pri registracii
 
             // ak to je moja sprava, nastavim farbu na cervenu
             if (userText.text == activity?.intent?.getStringExtra("username").toString()) {
                 userText.setTextColor(Color.rgb(179, 137, 237))
-            }
-
-            if (userText.text == "System") {
+            } else if (userText.text == "System") {
                 userText.setTextColor(Color.CYAN)
             } else {
                 userText.setTextColor(Color.rgb(255, 195, 0))
