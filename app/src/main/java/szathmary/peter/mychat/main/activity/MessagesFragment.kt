@@ -6,10 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,14 +26,13 @@ import szathmary.peter.mychat.message.Message
 class MessagesFragment : Fragment() {
 
     private val adapter = MessagesAdapter()
+    private lateinit var databaseMessageAddListener: ChildEventListener
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //reference for part of database with messages
-        val dbReference = Firebase.database.getReference("Messages")
-        dbReference.addChildEventListener(object : ChildEventListener {
+        databaseMessageAddListener = object : ChildEventListener {
             /**
              * If new message is added to the database, it will be displayed in recycleView
              */
@@ -75,7 +71,20 @@ class MessagesFragment : Fragment() {
             override fun onCancelled(error: DatabaseError) {
                 Log.e("Error in reading new messages from database", error.message)
             }
-        })
+        }
+        //reference for part of database with messages
+        val dbReference = Firebase.database.getReference("Messages")
+
+        dbReference.addChildEventListener(databaseMessageAddListener)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        //reference for part of database with messages
+        val dbReference = Firebase.database.getReference("Messages")
+        // detach listener from database before destroying fragment
+        dbReference.removeEventListener(databaseMessageAddListener)
     }
 
     /**

@@ -37,12 +37,6 @@ class MainScreenActivityRegular : AppCompatActivity() {
         sendOnlineNotification()
     }
 
-    override fun onStart() {
-        super.onStart()
-
-
-    }
-
     /**
      * Send message from System that user is online
      */
