@@ -18,6 +18,9 @@ import szathmary.peter.mychat.logic.login.InternetConnectionChecker
 import szathmary.peter.mychat.logic.login.Password
 import szathmary.peter.mychat.ui.login.LoginActivity
 
+/**
+ * Activity for resetting user's password
+ */
 class ResetPasswordActivity : AppCompatActivity() {
 
     private var passwordRepeatReady = false // indicator if username is in correct state
