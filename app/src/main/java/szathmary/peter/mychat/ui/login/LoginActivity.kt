@@ -104,11 +104,11 @@ class LoginActivity : AppCompatActivity() {
             binding.errorWarningMessageLogin.text = getString(R.string.empty_string)
             if (!InternetConnectionChecker().hasInternetConnection(this)) {
                 binding.errorWarningMessageLogin.text =
-                    "You are not connected to the internet!" // dat ako text
+                    getString(R.string.no_internet)
                 return@setOnClickListener
             }
             if (binding.usernameTextEditLogin.text.isEmpty() || binding.passwordTextEditLogin.text.isEmpty()) {
-                binding.errorWarningMessageLogin.text = "You must fill out all forms!"
+                binding.errorWarningMessageLogin.text = getString(R.string.fill_out_all_forms)
                 return@setOnClickListener
             }
 

@@ -47,16 +47,17 @@ class MainScreenActivityRegular : AppCompatActivity() {
      * Send message from System that user is online
      */
     private fun sendOnlineNotification() {
-        val dbReferrence = Firebase.database.getReference("Messages")
-        val newChild = dbReferrence.push()
+        val dbReference = Firebase.database.getReference("Messages")
+        val newChild = dbReference.push()
 
         val key = newChild.key
         if (key != null) {
-            dbReferrence.child(key).setValue(
+            dbReference.child(key).setValue(
                 Message(
-                    "System",
-                    intent?.getStringExtra("username")
-                        .toString() + " is online!" // getting username from LoginActivity
+                    "System", getString(
+                        R.string.user_is_online, intent?.getStringExtra("username")
+                            .toString()
+                    ) // getting username from LoginActivity
                 )
             )
         }

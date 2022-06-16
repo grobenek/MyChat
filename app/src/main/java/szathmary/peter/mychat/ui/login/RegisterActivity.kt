@@ -126,9 +126,9 @@ class RegisterActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 emailReady = EmailChecker().isValidEmail(email.text)
                 if (!emailReady) {
-                    warningMessage?.text = "You must enter a valid email adress!"
+                    warningMessage?.text = getString(R.string.enter_valid_email)
                 } else {
-                    warningMessage?.text = ""
+                    warningMessage?.text = getString(R.string.empty_string)
                 }
                 register.isEnabled = checkForLoginAvailability()
             }
@@ -160,11 +160,11 @@ class RegisterActivity : AppCompatActivity() {
             binding.errorWarningMessage?.text = getString(R.string.empty_string)
             if (!InternetConnectionChecker().hasInternetConnection(this)) {
                 binding.errorWarningMessage?.text =
-                    "You are not connected to the internet!" // dat ako text
+                    getString(R.string.no_internet)
                 return@setOnClickListener
             }
             if (username.text.isEmpty() || email.text.isEmpty() || password.text.isEmpty()) {
-                warningMessage?.text = "You must fill out all forms!"
+                warningMessage?.text = getString(R.string.fill_out_all_forms)
                 return@setOnClickListener
             }
             binding.register.isEnabled = false
@@ -201,7 +201,7 @@ class RegisterActivity : AppCompatActivity() {
                 }
                 // create user in database and switch activity to LoginActivity
                 writeUserToDatabase(loginInformationFromUser)
-                warningMessage?.text = getString(R.string.registration_succesfull)
+                warningMessage?.text = getString(R.string.registration_successful)
                 GlobalScope.launch { // launch new coroutine in background and continue
                     delay(1500) // non-blocking delay for 1 second (default time unit is ms)
                     switchToLoginActivity()

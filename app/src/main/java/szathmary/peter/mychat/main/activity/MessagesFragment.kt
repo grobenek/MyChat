@@ -1,6 +1,5 @@
 package szathmary.peter.mychat.main.activity
 
-import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.core.Context
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import szathmary.peter.mychat.R
@@ -37,8 +35,8 @@ class MessagesFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         //reference for part of database with messages
-        val dbreference = Firebase.database.getReference("Messages")
-        dbreference.addChildEventListener(object : ChildEventListener {
+        val dbReference = Firebase.database.getReference("Messages")
+        dbReference.addChildEventListener(object : ChildEventListener {
             /**
              * If new message is added to the database, it will be displayed in recycleView
              */
@@ -96,13 +94,6 @@ class MessagesFragment : Fragment() {
         }
     }
 
-    //skusam
-    override fun onStart() {
-        super.onStart()
-        val rvMessages: RecyclerView = view!!.findViewById(R.id.messages_recycle) as RecyclerView
-        rvMessages.scrollToPosition(MessageList.size() - 1)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -143,7 +134,7 @@ class MessagesFragment : Fragment() {
                 if (!InternetConnectionChecker().hasInternetConnection(activity?.applicationContext!!)) {
                     Toast.makeText(
                         activity?.applicationContext,
-                        "You are not connected to the internet!",
+                        getString(R.string.no_internet),
                         Toast.LENGTH_SHORT
                     ).show()
                     return@setOnClickListener
@@ -166,12 +157,12 @@ class MessagesFragment : Fragment() {
      * @param messageInput EditText with text of the new message
      */
     private fun sendMessageToTheDatabase(messageInput: EditText) {
-        val dbReferrence = Firebase.database.getReference("Messages")
-        val newChild = dbReferrence.push()
+        val dbReference = Firebase.database.getReference("Messages")
+        val newChild = dbReference.push()
 
         val key = newChild.key
         if (key != null) {
-            dbReferrence.child(key).setValue(
+            dbReference.child(key).setValue(
                 Message(
                     activity?.intent?.getStringExtra("username")
                         .toString(), // getting username of user from loginActivity
@@ -186,7 +177,7 @@ class MessagesFragment : Fragment() {
      */
     inner class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.ViewHolder>() {
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            // initiliazers
+            // initializers
             val user: TextView = itemView.findViewById(R.id.message_user_name)
             val message: TextView = itemView.findViewById(R.id.message_text)
         }
@@ -195,7 +186,7 @@ class MessagesFragment : Fragment() {
             val context = parent.context
 
             val inflater = LayoutInflater.from(context)
-            // Inflate the layoult
+            // Inflate the layout
             val contactView = inflater.inflate(R.layout.item_list_message, parent, false)
 
             return ViewHolder(contactView)

@@ -14,8 +14,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import szathmary.peter.mychat.R
 import szathmary.peter.mychat.databinding.ActivityResetPasswordBinding
+import szathmary.peter.mychat.logic.login.InternetConnectionChecker
 import szathmary.peter.mychat.logic.login.Password
-import szathmary.peter.mychat.message.Message
 import szathmary.peter.mychat.ui.login.LoginActivity
 
 class ResetPasswordActivity : AppCompatActivity() {
@@ -71,11 +71,13 @@ class ResetPasswordActivity : AppCompatActivity() {
              * If passwordRepeat is changed, checks it's condition and set crossPassword and warningMessage
              */
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                passwordReady = (binding.passwordPasswordReset.text.toString() == binding.passwordRepeatReset.text.toString())
+                passwordReady =
+                    (binding.passwordPasswordReset.text.toString() == binding.passwordRepeatReset.text.toString())
 
                 if (!passwordReady) {
                     binding.crossPasswordResetPasswordRepeat.isVisible = true
-                    binding.errorWarningMessageReset.text = "Passwords are not matching!"
+                    binding.errorWarningMessageReset.text =
+                        getString(R.string.passwords_not_matching)
                 } else {
                     binding.crossPasswordResetPasswordRepeat.isVisible = false
                     binding.errorWarningMessageReset.text = getString(R.string.empty_string)
@@ -90,11 +92,17 @@ class ResetPasswordActivity : AppCompatActivity() {
 
         // change password in database and change to LoginActivity
         binding.resetPasswordButton.setOnClickListener {
-            val dbReferrence = Firebase.database.getReference("User")
-                .child(intent?.getStringExtra("username").toString()).child("password")
-            dbReferrence.setValue(Password(binding.passwordPasswordReset.text.toString()).getSecuredPassword())
 
-            binding.errorWarningMessageReset.text = "Password succesfully changed!"
+            if (!InternetConnectionChecker().hasInternetConnection(applicationContext)) {
+                binding.errorWarningMessageReset.text = getString(R.string.no_internet)
+                return@setOnClickListener
+            }
+
+            val dbReference = Firebase.database.getReference("User")
+                .child(intent?.getStringExtra("username").toString()).child("password")
+            dbReference.setValue(Password(binding.passwordPasswordReset.text.toString()).getSecuredPassword())
+
+            binding.errorWarningMessageReset.text = getString(R.string.password_change_successfully)
             binding.resetPasswordButton.isEnabled = false
 
             GlobalScope.launch { // launch new coroutine in background and continue

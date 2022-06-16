@@ -47,13 +47,13 @@ class UserFragment : Fragment() {
 
         attachListenerToTheLogoutButton(logoutButton)
 
-        val forgotPassword : TextView = view.findViewById(R.id.forgot_password)
+        val forgotPassword: TextView = view.findViewById(R.id.forgot_password)
 
-        forgotPassword.setOnClickListener{
+        forgotPassword.setOnClickListener {
             logoutButton.isEnabled = false
             GlobalScope.launch { // launch new coroutine in background and continue
                 delay(1000) // non-blocking delay for 1 second (default time unit is ms)
-              switchToResetPasswordActivity()
+                switchToResetPasswordActivity()
             }
         }
     }

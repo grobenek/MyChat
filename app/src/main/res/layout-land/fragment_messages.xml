@@ -11,8 +11,10 @@
         android:id="@+id/message_input"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:autofillHints="true"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="@string/type_a_message"
         android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/send_button"
@@ -33,8 +35,10 @@
         android:id="@+id/send_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/send_message_button"
         android:src="@android:drawable/ic_menu_send"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="RedundantDescriptionCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
