@@ -51,6 +51,7 @@ class UserFragment : Fragment() {
 
         forgotPassword.setOnClickListener {
             logoutButton.isEnabled = false
+            forgotPassword.isEnabled = false
             GlobalScope.launch { // launch new coroutine in background and continue
                 delay(1000) // non-blocking delay for 1 second (default time unit is ms)
                 switchToResetPasswordActivity()
@@ -90,7 +91,6 @@ class UserFragment : Fragment() {
      * Switch to ResetPasswordActivity and clear activity stack
      */
     private fun switchToResetPasswordActivity() {
-        activity?.finishAffinity() // clear activity stack
         activity?.intent?.removeExtra("username")
         activity?.intent?.removeExtra("email")
         val switchActivityIntent =
