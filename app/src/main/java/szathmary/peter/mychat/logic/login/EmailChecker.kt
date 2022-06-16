@@ -1,14 +1,13 @@
 package szathmary.peter.mychat.logic.login
 
-import android.text.TextUtils
 import android.util.Patterns
 
 /**
- * Class for checking format of username(email)
+ * Class for checking format of email
  */
 class EmailChecker {
     /**
-     * Checks for right format of username(email)
+     * Checks for right format of email
      *
      * @param target email to check
      *@return true if email is in right format, else false
