@@ -12,7 +12,7 @@
     tools:context=".ui.login.RegisterActivity">
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/password_password_reset"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -23,7 +23,7 @@
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/welcome_register" />
 
     <EditText
         android:id="@+id/email"
@@ -36,10 +36,10 @@
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/password_password_reset" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/password_repeat_reset"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autofillHints=""
@@ -61,38 +61,38 @@
         android:enabled="false"
         android:text="@string/action_register"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/password"
-        app:layout_constraintStart_toStartOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintEnd_toEndOf="@+id/password_repeat_reset"
+        app:layout_constraintStart_toStartOf="@+id/password_repeat_reset"
+        app:layout_constraintTop_toBottomOf="@+id/password_repeat_reset"
         app:layout_constraintVertical_bias="0.26" />
 
     <ImageView
         android:id="@+id/cross_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/password"
-        app:layout_constraintEnd_toEndOf="@+id/password"
-        app:layout_constraintTop_toTopOf="@+id/password"
+        app:layout_constraintBottom_toBottomOf="@+id/password_repeat_reset"
+        app:layout_constraintEnd_toEndOf="@+id/password_repeat_reset"
+        app:layout_constraintTop_toTopOf="@+id/password_repeat_reset"
         app:srcCompat="@android:drawable/ic_delete" />
 
     <TextView
         android:id="@+id/error_warning_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintEnd_toEndOf="@+id/password_repeat_reset"
+        app:layout_constraintTop_toBottomOf="@+id/password_repeat_reset" />
 
     <ImageView
         android:id="@+id/cross_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/username"
-        app:layout_constraintEnd_toEndOf="@+id/username"
-        app:layout_constraintTop_toTopOf="@+id/username"
+        app:layout_constraintBottom_toBottomOf="@+id/password_password_reset"
+        app:layout_constraintEnd_toEndOf="@+id/password_password_reset"
+        app:layout_constraintTop_toTopOf="@+id/password_password_reset"
         app:srcCompat="@android:drawable/ic_delete" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/welcome_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

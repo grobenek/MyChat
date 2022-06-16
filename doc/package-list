@@ -1,0 +1,10 @@
+$dokka.format:javadoc-v1
+$dokka.linkExtension:html
+$dokka.location:szathmary.peter.mychat.main.activity/MessagesFragment.MessagesAdapter.ViewHolder///PointingToDeclaration/szathmary/peter/mychat/main/activity/MessagesFragment.MessagesAdapter.ViewHolder.html
+$dokka.location:szathmary.peter.mychat.main.activity/MessagesFragment.MessagesAdapter///PointingToDeclaration/szathmary/peter/mychat/main/activity/MessagesFragment.MessagesAdapter.html
+szathmary.peter.mychat.logic.login
+szathmary.peter.mychat.main.activity
+szathmary.peter.mychat.message
+szathmary.peter.mychat.ui.login
+szathmary.peter.mychat.user
+
