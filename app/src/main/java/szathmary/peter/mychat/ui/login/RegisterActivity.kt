@@ -191,7 +191,6 @@ class RegisterActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
                 if (user != null) {
-                    Log.v("User is null", "User is null")
                     // checks if user with this name already exist
                     if (user.username == loginInformationFromUser.username) {
                         warningMessage?.text = getString(R.string.error_username_exists)
