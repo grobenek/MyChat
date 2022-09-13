@@ -32,6 +32,8 @@ class MessagesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        clearMessageScreen()
+
         databaseMessageAddListener = object : ChildEventListener {
             /**
              * If new message is added to the database, it will be displayed in recycleView
@@ -103,6 +105,16 @@ class MessagesFragment : Fragment() {
         }
     }
 
+    /**
+     * Remove all messages from MessageList and notify recycle view
+     */
+    private fun clearMessageScreen() {
+        val messagesCount = MessageList.size()
+        MessageList.removeAllMessages()
+
+        adapter.notifyItemRangeChanged(0, messagesCount)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -110,6 +122,8 @@ class MessagesFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_messages, container, false)
     }
+
+
 
     // will be called only on creation of the fragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -265,5 +279,9 @@ object MessageList {
      */
     fun size(): Int {
         return this.messageList.size
+    }
+
+    fun removeAllMessages(){
+        this.messageList.clear()
     }
 }
